@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>랜덤 이미지 선택</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #result {
+            text-align: center;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #img-description {
+            margin-top: 15px;
+            font-size: 1.5em; /* 글씨 크기를 키웁니다 */
+            font-weight: bold;
+            background: rgb(225, 243, 248); /* 형광팬 색상 */
+            padding: 10px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+        #result img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>대한민국 어디갈까?</h1>
+    <button onclick="pickRandomItem()">랜덤 도시 선택</button>
+    <div id="result">
+        <p id="img-description"></p>
+        <img id="random-img" src="" alt="랜덤 이미지" style="display:none;">
+        <p id="wiki-link" style="display:none;"></p>
+    </div>
+
+    <script>
+        // 항목 데이터
+        const items = [
+//            { name: '충청북도 진천군', link: 'https://ko.wikipedia.org/wiki/진천군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Jincheon.svg' },
+//            { name: '충청북도 괴산군', link: 'https://ko.wikipedia.org/wiki/괴산군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/76/Flag_of_Goesan.svg' },
+//            { name: '충청북도 음성군', link: 'https://ko.wikipedia.org/wiki/음성군', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Eumseong.svg' },
+//            { name: '충청북도 단양군', link: 'https://ko.wikipedia.org/wiki/단양군', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Flag_of_Danyang.svg' },
+            { name: '서울 강남구', link: 'https://ko.wikipedia.org/wiki/강남구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Flag_of_Gangnam%2C_Seoul.svg' },
+            { name: '서울 강동구', link: 'https://ko.wikipedia.org/wiki/강동구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Gangdong%2C_Seoul.svg' },
+            { name: '서울 강북구', link: 'https://ko.wikipedia.org/wiki/강북구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f4/Flag_of_Gangbuk%2C_Seoul.svg' },
+            { name: '서울 강서구', link: 'https://ko.wikipedia.org/wiki/강서구', image: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Gangseo%2C_Seoul.svg' },
+            { name: '서울 관악구', link: 'https://ko.wikipedia.org/wiki/관악구', image: 'https://upload.wikimedia.org/wikipedia/commons/b/bf/Flag_of_Gwanak%2C_Seoul.svg' },
+            { name: '서울 광진구', link: 'https://ko.wikipedia.org/wiki/광진구', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Gwangjin%2C_Seoul.svg' },
+            { name: '서울 구로구', link: 'https://ko.wikipedia.org/wiki/구로구', image: 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Flag_of_Guro%2C_Seoul.svg' },
+            { name: '서울 금천구', link: 'https://ko.wikipedia.org/wiki/금천구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Flag_of_Geumcheon%2C_Seoul.svg' },
+            { name: '서울 노원구', link: 'https://ko.wikipedia.org/wiki/노원구', image: 'https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Nowon%2C_Seoul.svg' },
+            { name: '서울 도봉구', link: 'https://ko.wikipedia.org/wiki/도봉구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Flag_of_Dobong%2C_Seoul.svg' },
+            { name: '서울 동대문구', link: 'https://ko.wikipedia.org/wiki/동대문구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/1c/Flag_of_Dongdaemun%2C_Seoul.svg' },
+            { name: '서울 동작구', link: 'https://ko.wikipedia.org/wiki/동작구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/40/Flag_of_Dongjak%2C_Seoul.svg' },
+            { name: '서울 마포구', link: 'https://ko.wikipedia.org/wiki/마포구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5d/Flag_of_Mapo%2C_Seoul.svg' },
+            { name: '서울 서대문구', link: 'https://ko.wikipedia.org/wiki/서대문구', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Seodaemun%2C_Seoul.svg' },
+            { name: '서울 서초구', link: 'https://ko.wikipedia.org/wiki/서초구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Seocho%2C_Seoul.svg' },
+            { name: '서울 성동구', link: 'https://ko.wikipedia.org/wiki/성동구', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a8/Flag_of_Seongdong%2C_Seoul.svg' },
+            { name: '서울 성북구', link: 'https://ko.wikipedia.org/wiki/성북구', image: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Seongbuk%2C_Seoul.svg' },
+            { name: '서울 송파구', link: 'https://ko.wikipedia.org/wiki/송파구', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Songpa,_Seoul.svg' },
+            { name: '서울 양천구', link: 'https://ko.wikipedia.org/wiki/양천구', image: 'https://upload.wikimedia.org/wikipedia/commons/8/80/Flag_of_Yangcheon%2C_Seoul.svg' },
+            { name: '서울 영등포구', link: 'https://ko.wikipedia.org/wiki/영등포구', image: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Flag_of_Yeongdeungpo%2C_Seoul.svg' },
+            { name: '서울 용산구', link: 'https://ko.wikipedia.org/wiki/용산구', image: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Yongsan%2C_Seoul.svg' },
+            { name: '서울 은평구', link: 'https://ko.wikipedia.org/wiki/은평구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Flag_of_Eunpyeong%2C_Seoul.svg' },
+            { name: '서울 종로구', link: 'https://ko.wikipedia.org/wiki/종로구', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b7/Flag_of_Jongno%2C_Seoul.svg' },
+            { name: '서울 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d6/Flag_of_Junggu%2C_Seoul.svg' },
+            { name: '서울 중랑구', link: 'https://ko.wikipedia.org/wiki/중랑구', image: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Jungnang%2C_Seoul.svg' },
+
+            { name: '부산광역시 강서구', link: 'https://ko.wikipedia.org/wiki/강서구', image: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Flag_of_Gangseo%2C_Busan.svg' },
+            { name: '부산광역시 금정구', link: 'https://ko.wikipedia.org/wiki/금정구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Flag_of_Geumjeong%2C_Busan.svg' },
+            { name: '부산광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구', image: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_Namgu%2C_Busan.svg' },
+            { name: '부산광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Flag_of_Donggu%2C_Busan.svg' },
+            { name: '부산광역시 동래구', link: 'https://ko.wikipedia.org/wiki/동래구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Flag_of_Dongnae%2C_Busan.svg' },
+            { name: '부산광역시 부산진구', link: 'https://ko.wikipedia.org/wiki/부산진구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Busanjin%2C_Busan.svg' },
+            { name: '부산광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Bukgu%2C_Busan.svg' },
+            { name: '부산광역시 사상구', link: 'https://ko.wikipedia.org/wiki/사상구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Sasang%2C_Busan.svg' },
+            { name: '부산광역시 사하구', link: 'https://ko.wikipedia.org/wiki/사하구', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d2/Flag_of_Saha%2C_Busan.svg' },
+            { name: '부산광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Flag_of_Seogu%2C_Busan.svg' },
+            { name: '부산광역시 수영구', link: 'https://ko.wikipedia.org/wiki/수영구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_Suyeong%2C_Busan.svg' },
+            { name: '부산광역시 연제구', link: 'https://ko.wikipedia.org/wiki/연제구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/1d/Flag_of_Yeonje%2C_Busan.svg' },
+            { name: '부산광역시 영도구', link: 'https://ko.wikipedia.org/wiki/영도구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Flag_of_Yeongdo%2C_Busan.svg' },
+            { name: '부산광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/75/Flag_of_Junggu%2C_Busan.svg' },
+            { name: '부산광역시 해운대구', link: 'https://ko.wikipedia.org/wiki/해운대구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Haeundae%2C_Busan.svg' },
+            { name: '부산광역시 기장군', link: 'https://ko.wikipedia.org/wiki/기장군', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Gijang%2C_Busan.svg' },
+
+            { name: '대구광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Flag_of_Namgu%2C_Daegu.svg' },
+            { name: '대구광역시 달서구', link: 'https://ko.wikipedia.org/wiki/달서구', image: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Flag_of_Dalseo%2C_Daegu.svg' },
+            { name: '대구광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Donggu%2C_Daegu.svg' },
+            { name: '대구광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_Bukgu%2C_Daegu.svg' },
+            { name: '대구광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_Seogu%2C_Daegu.svg' },
+            { name: '대구광역시 수성구', link: 'https://ko.wikipedia.org/wiki/수성구', image: 'https://upload.wikimedia.org/wikipedia/commons/3/37/Flag_of_Suseong%2C_Daegu.svg' },
+            { name: '대구광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Flag_of_Junggu%2C_Daegu.svg' },
+            { name: '대구광역시 달성군', link: 'https://ko.wikipedia.org/wiki/달성군', image: 'https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Dalseong%2C_Daegu.svg' },
+            { name: '대구광역시 군위군', link: 'https://ko.wikipedia.org/wiki/군위군', image: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Flag_of_Gunwi.svg' },
+
+            { name: '인천광역시 부평구', link: 'https://ko.wikipedia.org/wiki/부평구', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Bupyeong,_Incheon.svg' },
+            { name: '인천광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/46/Flag_of_Donggu%2C_Incheon.svg' },
+            { name: '인천광역시 계양구', link: 'https://ko.wikipedia.org/wiki/계양구', image: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_Gyeyang%2C_Incheon.svg' },
+            { name: '인천광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Junggu%2C_Incheon.svg' },
+            { name: '인천광역시 미추홀구', link: 'https://ko.wikipedia.org/wiki/미추홀구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Michuhol%2C_Incheon.svg' },
+            { name: '인천광역시 남동구', link: 'https://ko.wikipedia.org/wiki/남동구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_Namdong%2C_Incheon.svg' },
+            { name: '인천광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Flag_of_Seogu%2C_Incheon.svg' },
+            { name: '인천광역시 연수구', link: 'https://ko.wikipedia.org/wiki/연수구', image: 'https://upload.wikimedia.org/wikipedia/commons/6/69/Flag_of_Yeonsu%2C_Incheon.svg' },
+            { name: '인천광역시 강화군', link: 'https://ko.wikipedia.org/wiki/강화군', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Ganghwa,_Incheon.svg' },
+            { name: '인천광역시 옹진군', link: 'https://ko.wikipedia.org/wiki/옹진군', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Ongjin,_Incheon.svg' },
+
+            { name: '광주광역시 광산구', link: 'https://ko.wikipedia.org/wiki/광산구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Flag_of_Gwangsan%2C_Gwangju.svg' },
+            { name: '광주광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구', image: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Flag_of_Namgu%2C_Gwangju.svg' },
+            { name: '광주광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/d/da/Flag_of_Donggu%2C_Gwangju.svg' },
+            { name: '광주광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구', image: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Flag_of_Bukgu%2C_Gwangju.svg' },
+            { name: '광주광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Seogu,_Gwangju.svg' },
+
+            { name: '대전광역시 대덕구', link: 'https://ko.wikipedia.org/wiki/대덕구', image: 'https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Daedeok%2C_Daejeon.svg' },
+            { name: '대전광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f5/Flag_of_Donggu%2C_Daejeon.svg' },
+            { name: '대전광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Flag_of_Seogu%2C_Daejeon.svg' },
+            { name: '대전광역시 유성구', link: 'https://ko.wikipedia.org/wiki/유성구', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Flag_of_Yuseong%2C_Daejeon.svg' },
+            { name: '대전광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/2/2d/Flag_of_Junggu%2C_Daejeon.svg' },
+
+            { name: '울산광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Flag_of_Namgu%2C_Ulsan.svg' },
+            { name: '울산광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Flag_of_Donggu%2C_Ulsan.svg' },
+            { name: '울산광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/75/Flag_of_Bukgu%2C_Ulsan.svg' },
+            { name: '울산광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Flag_of_Junggu%2C_Ulsan.svg' },
+            { name: '울산광역시 울주군', link: 'https://ko.wikipedia.org/wiki/울주군', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8d/Flag_of_Ulju%2C_Ulsan.svg' },
+
+            { name: '경기도 수원시', link: 'https://ko.wikipedia.org/wiki/수원시', image: 'https://upload.wikimedia.org/wikipedia/commons/8/85/Flag_of_Suwon_%282022%29.svg' },
+            { name: '경기도 성남시', link: 'https://ko.wikipedia.org/wiki/성남시', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Seongnam.svg' },
+            { name: '경기도 안양시', link: 'https://ko.wikipedia.org/wiki/안양시', image: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Anyang.svg' },
+            { name: '경기도 부천시', link: 'https://ko.wikipedia.org/wiki/부천시', image: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Flag_of_Bucheon.svg' },
+            { name: '경기도 안산시', link: 'https://ko.wikipedia.org/wiki/안산시', image: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Flag_of_Ansan.svg' },
+            { name: '경기도 고양시', link: 'https://ko.wikipedia.org/wiki/고양시', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Flag_of_Goyang.svg' },
+            { name: '경기도 용인시', link: 'https://ko.wikipedia.org/wiki/용인시', image: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Flag_of_Yongin.svg' },
+            { name: '경기도 의정부시', link: 'https://ko.wikipedia.org/wiki/의정부시', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d6/Flag_of_Uijeongbu.svg' },
+            { name: '경기도 광명시', link: 'https://ko.wikipedia.org/wiki/광명시', image: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Flag_of_Gwangmyeong.svg' },
+            { name: '경기도 평택시', link: 'https://ko.wikipedia.org/wiki/평택시', image: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Flag_of_Pyeongtaek.svg' },
+            { name: '경기도 동두천시', link: 'https://ko.wikipedia.org/wiki/동두천시', image: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Dongducheon.svg' },
+            { name: '경기도 과천시', link: 'https://ko.wikipedia.org/wiki/과천시', image: 'https://upload.wikimedia.org/wikipedia/commons/3/37/Flag_of_Gwacheon.svg' },
+            { name: '경기도 구리시', link: 'https://ko.wikipedia.org/wiki/구리시', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Flag_of_Guri.svg' },
+            { name: '경기도 남양주시', link: 'https://ko.wikipedia.org/wiki/남양주시', image: 'https://upload.wikimedia.org/wikipedia/commons/1/10/Flag_of_Namyangju.svg' },
+            { name: '경기도 오산시', link: 'https://ko.wikipedia.org/wiki/오산시', image: 'https://upload.wikimedia.org/wikipedia/commons/7/72/Flag_of_Osan.svg' },
+            { name: '경기도 시흥시', link: 'https://ko.wikipedia.org/wiki/시흥시', image: 'https://upload.wikimedia.org/wikipedia/commons/0/07/Flag_of_Siheung.svg' },
+            { name: '경기도 군포시', link: 'https://ko.wikipedia.org/wiki/군포시', image: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Flag_of_Gunpo.svg' },
+            { name: '경기도 의왕시', link: 'https://ko.wikipedia.org/wiki/의왕시', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_of_Uiwang.svg' },
+            { name: '경기도 하남시', link: 'https://ko.wikipedia.org/wiki/하남시', image: 'https://upload.wikimedia.org/wikipedia/commons/9/94/Flag_of_Hanam.svg' },
+            { name: '경기도 파주시', link: 'https://ko.wikipedia.org/wiki/파주시', image: 'https://upload.wikimedia.org/wikipedia/commons/6/67/Flag_of_Paju.svg' },
+            { name: '경기도 이천시', link: 'https://ko.wikipedia.org/wiki/이천시', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Flag_of_Icheon.svg' },
+            { name: '경기도 안성시', link: 'https://ko.wikipedia.org/wiki/안성시', image: 'https://upload.wikimedia.org/wikipedia/commons/6/68/Flag_of_Anseong.svg' },
+            { name: '경기도 김포시', link: 'https://ko.wikipedia.org/wiki/김포시', image: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Flag_of_Gimpo.svg' },
+            { name: '경기도 화성시', link: 'https://ko.wikipedia.org/wiki/화성시', image: 'https://upload.wikimedia.org/wikipedia/commons/e/ed/Flag_of_Hwaseong.svg' },
+            { name: '경기도 광주시', link: 'https://ko.wikipedia.org/wiki/광주시', image: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_Gwangju%2C_Gyeonggi.svg' },
+            { name: '경기도 양주시', link: 'https://ko.wikipedia.org/wiki/양주시', image: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Yangju.svg' },
+            { name: '경기도 포천시', link: 'https://ko.wikipedia.org/wiki/포천시', image: 'https://upload.wikimedia.org/wikipedia/commons/4/40/Flag_of_Pocheon.svg' },
+            { name: '경기도 여주시', link: 'https://ko.wikipedia.org/wiki/여주시', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Yeoju.svg' },
+            { name: '경기도 연천군', link: 'https://ko.wikipedia.org/wiki/연천군', image: 'https://upload.wikimedia.org/wikipedia/commons/3/35/Flag_of_Yeoncheon.svg' },
+            { name: '경기도 가평군', link: 'https://ko.wikipedia.org/wiki/가평군', image: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Flag_of_Gapyeong.svg' },
+            { name: '경기도 양평군', link: 'https://ko.wikipedia.org/wiki/양평군', image: 'https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Yangpyeong.svg' },
+
+            { name: '강원도 춘천시', link: 'https://ko.wikipedia.org/wiki/춘천시', image: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Chuncheon.svg' },
+            { name: '강원도 원주시', link: 'https://ko.wikipedia.org/wiki/원주시', image: 'https://upload.wikimedia.org/wikipedia/commons/9/91/Flag_of_Wonju.svg' },
+            { name: '강원도 강릉시', link: 'https://ko.wikipedia.org/wiki/강릉시', image: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Flag_of_Gangneung.svg' },
+            { name: '강원도 동해시', link: 'https://ko.wikipedia.org/wiki/동해시', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b0/Flag_of_Donghae.svg' },
+            { name: '강원도 태백시', link: 'https://ko.wikipedia.org/wiki/태백시', image: 'https://upload.wikimedia.org/wikipedia/commons/c/c6/Flag_of_Taebaek.svg' },
+            { name: '강원도 속초시', link: 'https://ko.wikipedia.org/wiki/속초시', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Sokcho.svg' },
+            { name: '강원도 삼척시', link: 'https://ko.wikipedia.org/wiki/삼척시', image: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Flag_of_Samcheok.svg' },
+            { name: '강원도 홍천군', link: 'https://ko.wikipedia.org/wiki/홍천군', image: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Flag_of_Hongcheon.svg' },
+            { name: '강원도 횡성군', link: 'https://ko.wikipedia.org/wiki/횡성군', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Flag_of_Hoengseong.svg' },
+            { name: '강원도 영월군', link: 'https://ko.wikipedia.org/wiki/영월군', image: 'https://upload.wikimedia.org/wikipedia/commons/d/db/Flag_of_Yeongwol.svg' },
+            { name: '강원도 평창군', link: 'https://ko.wikipedia.org/wiki/평창군', image: 'https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Pyeongchang.svg' },
+            { name: '강원도 정선군', link: 'https://ko.wikipedia.org/wiki/정선군', image: 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Jeongseon.svg' },
+            { name: '강원도 철원군', link: 'https://ko.wikipedia.org/wiki/철원군', image: 'https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Cheorwon.svg' },
+            { name: '강원도 화천군', link: 'https://ko.wikipedia.org/wiki/화천군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/72/Flag_of_Hwacheon.svg' },
+            { name: '강원도 양구군', link: 'https://ko.wikipedia.org/wiki/양구군', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Yanggu.svg' },
+            { name: '강원도 인제군', link: 'https://ko.wikipedia.org/wiki/인제군', image: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Inje.svg' },
+            { name: '강원도 고성군', link: 'https://ko.wikipedia.org/wiki/고성군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/76/Flag_of_Goseong%2C_Gangwon.svg' },
+            { name: '강원도 양양군', link: 'https://ko.wikipedia.org/wiki/양양군', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d8/Flag_of_Yangyang.svg' },
+
+            { name: '충청북도 청주시', link: 'https://ko.wikipedia.org/wiki/청주시', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Cheongju.svg' },
+            { name: '충청북도 충주시', link: 'https://ko.wikipedia.org/wiki/충주시', image: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Flag_of_Chungju.svg' },
+            { name: '충청북도 제천시', link: 'https://ko.wikipedia.org/wiki/제천시', image: 'https://upload.wikimedia.org/wikipedia/commons/1/10/Flag_of_Jecheon.svg' },
+            { name: '충청북도 보은군', link: 'https://ko.wikipedia.org/wiki/보은군', image: 'https://upload.wikimedia.org/wikipedia/commons/6/6f/Flag_of_Boeun.svg' },
+            { name: '충청북도 옥천군', link: 'https://ko.wikipedia.org/wiki/옥천군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Flag_of_Okcheon.svg' },
+            { name: '충청북도 영동군', link: 'https://ko.wikipedia.org/wiki/영동군', image: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Flag_of_Yeongdong.svg' },
+            { name: '충청북도 증평군', link: 'https://ko.wikipedia.org/wiki/증평군', image: 'https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Jeungpyeong.svg' },
+            { name: '충청북도 진천군', link: 'https://ko.wikipedia.org/wiki/진천군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Jincheon.svg' },
+            { name: '충청북도 괴산군', link: 'https://ko.wikipedia.org/wiki/괴산군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/76/Flag_of_Goesan.svg' },
+            { name: '충청북도 음성군', link: 'https://ko.wikipedia.org/wiki/음성군', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Eumseong.svg' },
+            { name: '충청북도 단양군', link: 'https://ko.wikipedia.org/wiki/단양군', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Flag_of_Danyang.svg' },
+
+            { name: '충청남도 천안시', link: 'https://ko.wikipedia.org/wiki/천안시', image: 'https://upload.wikimedia.org/wikipedia/commons/8/85/Flag_of_Cheonan.svg' },
+            { name: '충청남도 공주시', link: 'https://ko.wikipedia.org/wiki/공주시', image: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Flag_of_Gongju.svg' },
+            { name: '충청남도 보령시', link: 'https://ko.wikipedia.org/wiki/보령시', image: 'https://upload.wikimedia.org/wikipedia/commons/8/86/Flag_of_Boryeong.svg' },
+            { name: '충청남도 아산시', link: 'https://ko.wikipedia.org/wiki/아산시', image: 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Asan.svg' },
+            { name: '충청남도 서산시', link: 'https://ko.wikipedia.org/wiki/서산시', image: 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Flag_of_Seosan.svg' },
+            { name: '충청남도 논산시', link: 'https://ko.wikipedia.org/wiki/논산시', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Nonsan.svg' },
+            { name: '충청남도 계룡시', link: 'https://ko.wikipedia.org/wiki/계룡시', image: 'https://upload.wikimedia.org/wikipedia/commons/5/55/Flag_of_Gyeryong.svg' },
+            { name: '충청남도 당진시', link: 'https://ko.wikipedia.org/wiki/당진시', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Flag_of_Dangjin.svg' },
+            { name: '충청남도 금산군', link: 'https://ko.wikipedia.org/wiki/금산군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Flag_of_Geumsan.svg' },
+            { name: '충청남도 부여군', link: 'https://ko.wikipedia.org/wiki/부여군', image: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Flag_of_Buyeo.svg' },
+            { name: '충청남도 서천군', link: 'https://ko.wikipedia.org/wiki/서천군', image: 'https://upload.wikimedia.org/wikipedia/commons/6/67/Flag_of_Seocheon.svg' },
+            { name: '충청남도 청양군', link: 'https://ko.wikipedia.org/wiki/청양군', image: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Flag_of_Cheongyang.svg' },
+            { name: '충청남도 홍성군', link: 'https://ko.wikipedia.org/wiki/홍성군', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Hongseong.svg' },
+            { name: '충청남도 예산군', link: 'https://ko.wikipedia.org/wiki/예산군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/78/Flag_of_Yesan.svg' },
+            { name: '충청남도 태안군', link: 'https://ko.wikipedia.org/wiki/태안군', image: 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Flag_of_Taean.svg' },
+
+            { name: '세종특별자치시', link: 'https://ko.wikipedia.org/wiki/세종특별자치시', image: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Flag_of_Sejong_City.svg' },
+
+            { name: '전라북도 전주시', link: 'https://ko.wikipedia.org/wiki/전주시', image: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Flag_of_Jeonju.svg' },
+            { name: '전라북도 군산시', link: 'https://ko.wikipedia.org/wiki/군산시', image: 'https://upload.wikimedia.org/wikipedia/commons/3/37/Flag_of_Gunsan.svg' },
+            { name: '전라북도 익산시', link: 'https://ko.wikipedia.org/wiki/익산시', image: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Flag_of_Iksan.svg' },
+            { name: '전라북도 정읍시', link: 'https://ko.wikipedia.org/wiki/정읍시', image: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Flag_of_Jeongeup.svg' },
+            { name: '전라북도 남원시', link: 'https://ko.wikipedia.org/wiki/남원시', image: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Flag_of_Namwon.svg' },
+            { name: '전라북도 김제시', link: 'https://ko.wikipedia.org/wiki/김제시', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a8/Flag_of_Gimje.svg' },
+            { name: '전라북도 완주군', link: 'https://ko.wikipedia.org/wiki/완주군', image: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_Wanju.svg' },
+            { name: '전라북도 진안군', link: 'https://ko.wikipedia.org/wiki/진안군', image: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Flag_of_Jinan.svg' },
+            { name: '전라북도 무주군', link: 'https://ko.wikipedia.org/wiki/무주군', image: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Muju.svg' },
+            { name: '전라북도 장수군', link: 'https://ko.wikipedia.org/wiki/장수군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Jangsu.svg' },
+            { name: '전라북도 임실군', link: 'https://ko.wikipedia.org/wiki/임실군', image: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Flag_of_Imsil.svg' },
+            { name: '전라북도 순창군', link: 'https://ko.wikipedia.org/wiki/순창군', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Sunchang.svg' },
+            { name: '전라북도 고창군', link: 'https://ko.wikipedia.org/wiki/고창군', image: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Gochang.svg' },
+            { name: '전라북도 부안군', link: 'https://ko.wikipedia.org/wiki/부안군', image: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Flag_of_Buan.svg' },
+
+            { name: '전라남도 목포시', link: 'https://ko.wikipedia.org/wiki/목포시', image: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Flag_of_Mokpo.svg' },
+            { name: '전라남도 여수시', link: 'https://ko.wikipedia.org/wiki/여수시', image: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_Yeosu.svg' },
+            { name: '전라남도 순천시', link: 'https://ko.wikipedia.org/wiki/순천시', image: 'https://upload.wikimedia.org/wikipedia/commons/e/e9/Flag_of_Suncheon.svg' },
+            { name: '전라남도 나주시', link: 'https://ko.wikipedia.org/wiki/나주시', image: 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Naju.svg' },
+            { name: '전라남도 광양시', link: 'https://ko.wikipedia.org/wiki/광양시', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_of_Gwangyang.svg' },
+            { name: '전라남도 담양군', link: 'https://ko.wikipedia.org/wiki/담양군', image: 'https://upload.wikimedia.org/wikipedia/commons/b/bb/Flag_of_Damyang.svg' },
+            { name: '전라남도 곡성군', link: 'https://ko.wikipedia.org/wiki/곡성군', image: 'https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Gokseong.svg' },
+            { name: '전라남도 구례군', link: 'https://ko.wikipedia.org/wiki/구례군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Flag_of_Gurye.svg' },
+            { name: '전라남도 고흥군', link: 'https://ko.wikipedia.org/wiki/고흥군', image: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Flag_of_Goheung.svg' },
+            { name: '전라남도 보성군', link: 'https://ko.wikipedia.org/wiki/보성군', image: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Flag_of_Boseong.svg' },
+            { name: '전라남도 화순군', link: 'https://ko.wikipedia.org/wiki/화순군', image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Flag_of_Hwasun.svg' },
+            { name: '전라남도 장흥군', link: 'https://ko.wikipedia.org/wiki/장흥군', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5d/Flag_of_Jangheung.svg' },
+            { name: '전라남도 강진군', link: 'https://ko.wikipedia.org/wiki/강진군', image: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Flag_of_Gangjin.svg' },
+            { name: '전라남도 해남군', link: 'https://ko.wikipedia.org/wiki/해남군', image: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Flag_of_Haenam.svg' },
+            { name: '전라남도 영암군', link: 'https://ko.wikipedia.org/wiki/영암군', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Flag_of_Yeongam.svg' },
+            { name: '전라남도 무안군', link: 'https://ko.wikipedia.org/wiki/무안군', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Flag_of_Muan.svg' },
+            { name: '전라남도 함평군', link: 'https://ko.wikipedia.org/wiki/함평군', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b0/Flag_of_Hampyeong.svg' },
+            { name: '전라남도 영광군', link: 'https://ko.wikipedia.org/wiki/영광군', image: 'https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Yeonggwang.svg' },
+            { name: '전라남도 장성군', link: 'https://ko.wikipedia.org/wiki/장성군', image: 'https://upload.wikimedia.org/wikipedia/commons/7/71/Flag_of_Jangseong.svg' },
+            { name: '전라남도 완도군', link: 'https://ko.wikipedia.org/wiki/완도군', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Flag_of_Wando.svg' },
+            { name: '전라남도 진도군', link: 'https://ko.wikipedia.org/wiki/진도군', image: 'https://upload.wikimedia.org/wikipedia/commons/5/56/Flag_of_Jindo.svg' },
+            { name: '전라남도 신안군', link: 'https://ko.wikipedia.org/wiki/신안군', image: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Flag_of_Sinan.svg' },
+
+            { name: '경상북도 포항시', link: 'https://ko.wikipedia.org/wiki/포항시', image: 'https://upload.wikimedia.org/wikipedia/commons/6/67/Flag_of_Pohang.svg' },
+            { name: '경상북도 경주시', link: 'https://ko.wikipedia.org/wiki/경주시', image: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Flag_of_Gyeongju.svg' },
+            { name: '경상북도 김천시', link: 'https://ko.wikipedia.org/wiki/김천시', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Flag_of_Gimcheon.svg' },
+            { name: '경상북도 안동시', link: 'https://ko.wikipedia.org/wiki/안동시', image: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Flag_of_Andong.svg' },
+            { name: '경상북도 구미시', link: 'https://ko.wikipedia.org/wiki/구미시', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Flag_of_Gumi.svg' },
+            { name: '경상북도 영주시', link: 'https://ko.wikipedia.org/wiki/영주시', image: 'https://upload.wikimedia.org/wikipedia/commons/b/bd/Flag_of_Yeongju.svg' },
+            { name: '경상북도 영천시', link: 'https://ko.wikipedia.org/wiki/영천시', image: 'https://upload.wikimedia.org/wikipedia/commons/8/85/Flag_of_Yeongcheon.svg' },
+            { name: '경상북도 상주시', link: 'https://ko.wikipedia.org/wiki/상주시', image: 'https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Sangju.svg' },
+            { name: '경상북도 문경시', link: 'https://ko.wikipedia.org/wiki/문경시', image: 'https://upload.wikimedia.org/wikipedia/commons/7/78/Flag_of_Mungyeong.svg' },
+            { name: '경상북도 경산시', link: 'https://ko.wikipedia.org/wiki/경산시', image: 'https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Gyeongsan.svg' },
+            { name: '경상북도 의성군', link: 'https://ko.wikipedia.org/wiki/의성군', image: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_Uiseong.svg' },
+            { name: '경상북도 청송군', link: 'https://ko.wikipedia.org/wiki/청송군', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/Flag_of_Cheongsong.svg' },
+            { name: '경상북도 영양군', link: 'https://ko.wikipedia.org/wiki/영양군', image: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Flag_of_Yeongyang.svg' },
+            { name: '경상북도 영덕군', link: 'https://ko.wikipedia.org/wiki/영덕군', image: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Flag_of_Yeongdeok.svg' },
+            { name: '경상북도 청도군', link: 'https://ko.wikipedia.org/wiki/청도군', image: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Flag_of_Cheongdo.svg' },
+            { name: '경상북도 고령군', link: 'https://ko.wikipedia.org/wiki/고령군', image: 'https://upload.wikimedia.org/wikipedia/commons/5/50/Flag_of_Goryeong.svg' },
+            { name: '경상북도 성주군', link: 'https://ko.wikipedia.org/wiki/성주군', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Flag_of_Seongju.svg' },
+            { name: '경상북도 칠곡군', link: 'https://ko.wikipedia.org/wiki/칠곡군', image: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/Flag_of_Chilgok.svg' },
+            { name: '경상북도 예천군', link: 'https://ko.wikipedia.org/wiki/예천군', image: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Flag_of_Yecheon.svg' },
+            { name: '경상북도 봉화군', link: 'https://ko.wikipedia.org/wiki/봉화군', image: 'https://upload.wikimedia.org/wikipedia/commons/9/94/Flag_of_Bonghwa.svg' },
+            { name: '경상북도 울진군', link: 'https://ko.wikipedia.org/wiki/울진군', image: 'https://upload.wikimedia.org/wikipedia/commons/9/97/Flag_of_Uljin.svg' },
+            { name: '경상북도 울릉군', link: 'https://ko.wikipedia.org/wiki/울릉군', image: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Flag_of_Ulleung.svg' },
+
+            { name: '경상남도 창원시', link: 'https://ko.wikipedia.org/wiki/창원시', image: 'https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Changwon.svg' },
+            { name: '경상남도 진주시', link: 'https://ko.wikipedia.org/wiki/진주시', image: 'https://upload.wikimedia.org/wikipedia/commons/d/db/Flag_of_Jinju.svg' },
+            { name: '경상남도 통영시', link: 'https://ko.wikipedia.org/wiki/통영시', image: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Flag_of_Tongyeong.svg' },
+            { name: '경상남도 사천시', link: 'https://ko.wikipedia.org/wiki/사천시', image: 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Sacheon.svg' },
+            { name: '경상남도 김해시', link: 'https://ko.wikipedia.org/wiki/김해시', image: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Gimhae.svg' },
+            { name: '경상남도 밀양시', link: 'https://ko.wikipedia.org/wiki/밀양시', image: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Flag_of_Miryang.svg' },
+            { name: '경상남도 거제시', link: 'https://ko.wikipedia.org/wiki/거제시', image: 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Flag_of_Geoje.svg' },
+            { name: '경상남도 양산시', link: 'https://ko.wikipedia.org/wiki/양산시', image: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Flag_of_Yangsan.svg' },
+            { name: '경상남도 의령군', link: 'https://ko.wikipedia.org/wiki/의령군', image: 'https://upload.wikimedia.org/wikipedia/commons/2/27/Flag_of_Uiryeong.svg' },
+            { name: '경상남도 함안군', link: 'https://ko.wikipedia.org/wiki/함안군', image: 'https://upload.wikimedia.org/wikipedia/commons/e/e8/Flag_of_Haman.svg' },
+            { name: '경상남도 창녕군', link: 'https://ko.wikipedia.org/wiki/창녕군', image: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_Changnyeong.svg' },
+            { name: '경상남도 고성군', link: 'https://ko.wikipedia.org/wiki/고성군', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Goseong%2C_South_Gyeongsang.svg' },
+            { name: '경상남도 남해군', link: 'https://ko.wikipedia.org/wiki/남해군', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Namhae.svg' },
+            { name: '경상남도 하동군', link: 'https://ko.wikipedia.org/wiki/하동군', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Hadong.svg' },
+            { name: '경상남도 산청군', link: 'https://ko.wikipedia.org/wiki/산청군', image: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Flag_of_Sancheong.svg' },
+            { name: '경상남도 함양군', link: 'https://ko.wikipedia.org/wiki/함양군', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Hamyang.svg' },
+            { name: '경상남도 거창군', link: 'https://ko.wikipedia.org/wiki/거창군', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Flag_of_Geochang.svg' },
+            { name: '경상남도 합천군', link: 'https://ko.wikipedia.org/wiki/합천군', image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Flag_of_Hapcheon.svg' },
+
+            { name: '제주도 제주시', link: 'https://ko.wikipedia.org/wiki/제주시', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Flag_of_Jeju_Province.svg' },
+            { name: '제주도 서귀포시', link: 'https://ko.wikipedia.org/wiki/서귀포시', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Flag_of_Jeju_Province.svg' }
+        ];
+
+        // 랜덤으로 항목을 선택하고 결과를 표시하는 함수
+        function pickRandomItem() {
+            // 랜덤으로 항목 선택
+            const randomIndex = Math.floor(Math.random() * items.length);
+            const selectedItem = items[randomIndex];
+
+            // 결과 업데이트
+            document.getElementById('random-img').src = selectedItem.image;
+            document.getElementById('random-img').style.display = 'block';
+            document.getElementById('img-description').textContent = `${selectedItem.name}당첨!!`;
+            document.getElementById('wiki-link').innerHTML = `<a href="${selectedItem.link}" target="_blank">${selectedItem.name}의 위키백과 페이지로 이동(Link)</a>`;
+            document.getElementById('wiki-link').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
