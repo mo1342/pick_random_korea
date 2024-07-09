@@ -41,15 +41,19 @@
             border-radius: 5px;
         }
         #result img {
-            max-width: 100%;
+            max-width: 70%;
             height: auto;
             border: 2px solid #333;
             border-radius: 8px;
+            display: block;  /* 블록 레벨 요소로 설정 */
+            margin-left: auto; /* 왼쪽 마진 자동으로 설정 */
+            margin-right: auto; /* 오른쪽 마진 자동으로 설정 */
         }
     </style>
 </head>
 <body>
     <h1>대한민국 어디갈까?</h1>
+    사용법 : <a href="https://blog.naver.com/mo1342">https://blog.naver.com/mo1342 </a><br>
     <button onclick="pickRandomItem()">랜덤 도시 선택</button>
     <div id="result">
         <p id="img-description"></p>
@@ -67,7 +71,7 @@
             { name: '서울 강남구', link: 'https://ko.wikipedia.org/wiki/강남구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Flag_of_Gangnam%2C_Seoul.svg' },
             { name: '서울 강동구', link: 'https://ko.wikipedia.org/wiki/강동구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Gangdong%2C_Seoul.svg' },
             { name: '서울 강북구', link: 'https://ko.wikipedia.org/wiki/강북구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f4/Flag_of_Gangbuk%2C_Seoul.svg' },
-            { name: '서울 강서구', link: 'https://ko.wikipedia.org/wiki/강서구', image: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Gangseo%2C_Seoul.svg' },
+            { name: '서울 강서구', link: 'https://ko.wikipedia.org/wiki/강서구_(서울특별시)', image: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Gangseo%2C_Seoul.svg' },
             { name: '서울 관악구', link: 'https://ko.wikipedia.org/wiki/관악구', image: 'https://upload.wikimedia.org/wikipedia/commons/b/bf/Flag_of_Gwanak%2C_Seoul.svg' },
             { name: '서울 광진구', link: 'https://ko.wikipedia.org/wiki/광진구', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Gwangjin%2C_Seoul.svg' },
             { name: '서울 구로구', link: 'https://ko.wikipedia.org/wiki/구로구', image: 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Flag_of_Guro%2C_Seoul.svg' },
@@ -87,63 +91,63 @@
             { name: '서울 용산구', link: 'https://ko.wikipedia.org/wiki/용산구', image: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Yongsan%2C_Seoul.svg' },
             { name: '서울 은평구', link: 'https://ko.wikipedia.org/wiki/은평구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Flag_of_Eunpyeong%2C_Seoul.svg' },
             { name: '서울 종로구', link: 'https://ko.wikipedia.org/wiki/종로구', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b7/Flag_of_Jongno%2C_Seoul.svg' },
-            { name: '서울 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d6/Flag_of_Junggu%2C_Seoul.svg' },
+            { name: '서울 중구', link: 'https://ko.wikipedia.org/wiki/중구_(서울특별시)', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d6/Flag_of_Junggu%2C_Seoul.svg' },
             { name: '서울 중랑구', link: 'https://ko.wikipedia.org/wiki/중랑구', image: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Jungnang%2C_Seoul.svg' },
 
-            { name: '부산광역시 강서구', link: 'https://ko.wikipedia.org/wiki/강서구', image: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Flag_of_Gangseo%2C_Busan.svg' },
+            { name: '부산광역시 강서구', link: 'https://ko.wikipedia.org/wiki/강서구_(부산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Flag_of_Gangseo%2C_Busan.svg' },
             { name: '부산광역시 금정구', link: 'https://ko.wikipedia.org/wiki/금정구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Flag_of_Geumjeong%2C_Busan.svg' },
-            { name: '부산광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구', image: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_Namgu%2C_Busan.svg' },
-            { name: '부산광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Flag_of_Donggu%2C_Busan.svg' },
+            { name: '부산광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구_(부산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_Namgu%2C_Busan.svg' },
+            { name: '부산광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구_(부산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Flag_of_Donggu%2C_Busan.svg' },
             { name: '부산광역시 동래구', link: 'https://ko.wikipedia.org/wiki/동래구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Flag_of_Dongnae%2C_Busan.svg' },
             { name: '부산광역시 부산진구', link: 'https://ko.wikipedia.org/wiki/부산진구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Busanjin%2C_Busan.svg' },
-            { name: '부산광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Bukgu%2C_Busan.svg' },
+            { name: '부산광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구_(부산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Bukgu%2C_Busan.svg' },
             { name: '부산광역시 사상구', link: 'https://ko.wikipedia.org/wiki/사상구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Sasang%2C_Busan.svg' },
             { name: '부산광역시 사하구', link: 'https://ko.wikipedia.org/wiki/사하구', image: 'https://upload.wikimedia.org/wikipedia/commons/d/d2/Flag_of_Saha%2C_Busan.svg' },
-            { name: '부산광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Flag_of_Seogu%2C_Busan.svg' },
+            { name: '부산광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구_(부산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Flag_of_Seogu%2C_Busan.svg' },
             { name: '부산광역시 수영구', link: 'https://ko.wikipedia.org/wiki/수영구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_Suyeong%2C_Busan.svg' },
             { name: '부산광역시 연제구', link: 'https://ko.wikipedia.org/wiki/연제구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/1d/Flag_of_Yeonje%2C_Busan.svg' },
             { name: '부산광역시 영도구', link: 'https://ko.wikipedia.org/wiki/영도구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Flag_of_Yeongdo%2C_Busan.svg' },
-            { name: '부산광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/75/Flag_of_Junggu%2C_Busan.svg' },
+            { name: '부산광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구_(부산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/7/75/Flag_of_Junggu%2C_Busan.svg' },
             { name: '부산광역시 해운대구', link: 'https://ko.wikipedia.org/wiki/해운대구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Haeundae%2C_Busan.svg' },
             { name: '부산광역시 기장군', link: 'https://ko.wikipedia.org/wiki/기장군', image: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Gijang%2C_Busan.svg' },
 
-            { name: '대구광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Flag_of_Namgu%2C_Daegu.svg' },
+            { name: '대구광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구_(대구광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Flag_of_Namgu%2C_Daegu.svg' },
             { name: '대구광역시 달서구', link: 'https://ko.wikipedia.org/wiki/달서구', image: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Flag_of_Dalseo%2C_Daegu.svg' },
-            { name: '대구광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Donggu%2C_Daegu.svg' },
-            { name: '대구광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_Bukgu%2C_Daegu.svg' },
-            { name: '대구광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_Seogu%2C_Daegu.svg' },
+            { name: '대구광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구_(대구광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Donggu%2C_Daegu.svg' },
+            { name: '대구광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구_(대구광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_Bukgu%2C_Daegu.svg' },
+            { name: '대구광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구_(대구광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_Seogu%2C_Daegu.svg' },
             { name: '대구광역시 수성구', link: 'https://ko.wikipedia.org/wiki/수성구', image: 'https://upload.wikimedia.org/wikipedia/commons/3/37/Flag_of_Suseong%2C_Daegu.svg' },
-            { name: '대구광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Flag_of_Junggu%2C_Daegu.svg' },
+            { name: '대구광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구_(대구광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Flag_of_Junggu%2C_Daegu.svg' },
             { name: '대구광역시 달성군', link: 'https://ko.wikipedia.org/wiki/달성군', image: 'https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Dalseong%2C_Daegu.svg' },
             { name: '대구광역시 군위군', link: 'https://ko.wikipedia.org/wiki/군위군', image: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Flag_of_Gunwi.svg' },
 
             { name: '인천광역시 부평구', link: 'https://ko.wikipedia.org/wiki/부평구', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Bupyeong,_Incheon.svg' },
-            { name: '인천광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/46/Flag_of_Donggu%2C_Incheon.svg' },
+            { name: '인천광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구_(인천광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/4/46/Flag_of_Donggu%2C_Incheon.svg' },
             { name: '인천광역시 계양구', link: 'https://ko.wikipedia.org/wiki/계양구', image: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_Gyeyang%2C_Incheon.svg' },
-            { name: '인천광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Junggu%2C_Incheon.svg' },
+            { name: '인천광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구_(인천광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Junggu%2C_Incheon.svg' },
             { name: '인천광역시 미추홀구', link: 'https://ko.wikipedia.org/wiki/미추홀구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Michuhol%2C_Incheon.svg' },
             { name: '인천광역시 남동구', link: 'https://ko.wikipedia.org/wiki/남동구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_Namdong%2C_Incheon.svg' },
-            { name: '인천광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Flag_of_Seogu%2C_Incheon.svg' },
+            { name: '인천광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구_(인천광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Flag_of_Seogu%2C_Incheon.svg' },
             { name: '인천광역시 연수구', link: 'https://ko.wikipedia.org/wiki/연수구', image: 'https://upload.wikimedia.org/wikipedia/commons/6/69/Flag_of_Yeonsu%2C_Incheon.svg' },
             { name: '인천광역시 강화군', link: 'https://ko.wikipedia.org/wiki/강화군', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Ganghwa,_Incheon.svg' },
             { name: '인천광역시 옹진군', link: 'https://ko.wikipedia.org/wiki/옹진군', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Ongjin,_Incheon.svg' },
 
             { name: '광주광역시 광산구', link: 'https://ko.wikipedia.org/wiki/광산구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Flag_of_Gwangsan%2C_Gwangju.svg' },
-            { name: '광주광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구', image: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Flag_of_Namgu%2C_Gwangju.svg' },
-            { name: '광주광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/d/da/Flag_of_Donggu%2C_Gwangju.svg' },
-            { name: '광주광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구', image: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Flag_of_Bukgu%2C_Gwangju.svg' },
-            { name: '광주광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Seogu,_Gwangju.svg' },
+            { name: '광주광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구_(광주광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Flag_of_Namgu%2C_Gwangju.svg' },
+            { name: '광주광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구_(광주광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/d/da/Flag_of_Donggu%2C_Gwangju.svg' },
+            { name: '광주광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구_(광주광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Flag_of_Bukgu%2C_Gwangju.svg' },
+            { name: '광주광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구_(광주광역시)', image: 'https://commons.wikimedia.org/wiki/File:Flag_of_Seogu,_Gwangju.svg' },
 
             { name: '대전광역시 대덕구', link: 'https://ko.wikipedia.org/wiki/대덕구', image: 'https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Daedeok%2C_Daejeon.svg' },
-            { name: '대전광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f5/Flag_of_Donggu%2C_Daejeon.svg' },
-            { name: '대전광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구', image: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Flag_of_Seogu%2C_Daejeon.svg' },
+            { name: '대전광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구_(대전광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f5/Flag_of_Donggu%2C_Daejeon.svg' },
+            { name: '대전광역시 서구', link: 'https://ko.wikipedia.org/wiki/서구_(대전광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Flag_of_Seogu%2C_Daejeon.svg' },
             { name: '대전광역시 유성구', link: 'https://ko.wikipedia.org/wiki/유성구', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Flag_of_Yuseong%2C_Daejeon.svg' },
-            { name: '대전광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/2/2d/Flag_of_Junggu%2C_Daejeon.svg' },
+            { name: '대전광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구_(대전광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/2/2d/Flag_of_Junggu%2C_Daejeon.svg' },
 
-            { name: '울산광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구', image: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Flag_of_Namgu%2C_Ulsan.svg' },
-            { name: '울산광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구', image: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Flag_of_Donggu%2C_Ulsan.svg' },
-            { name: '울산광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구', image: 'https://upload.wikimedia.org/wikipedia/commons/7/75/Flag_of_Bukgu%2C_Ulsan.svg' },
-            { name: '울산광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구', image: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Flag_of_Junggu%2C_Ulsan.svg' },
+            { name: '울산광역시 남구', link: 'https://ko.wikipedia.org/wiki/남구_(울산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Flag_of_Namgu%2C_Ulsan.svg' },
+            { name: '울산광역시 동구', link: 'https://ko.wikipedia.org/wiki/동구_(울산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Flag_of_Donggu%2C_Ulsan.svg' },
+            { name: '울산광역시 북구', link: 'https://ko.wikipedia.org/wiki/북구_(울산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/7/75/Flag_of_Bukgu%2C_Ulsan.svg' },
+            { name: '울산광역시 중구', link: 'https://ko.wikipedia.org/wiki/중구_(울산광역시)', image: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Flag_of_Junggu%2C_Ulsan.svg' },
             { name: '울산광역시 울주군', link: 'https://ko.wikipedia.org/wiki/울주군', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8d/Flag_of_Ulju%2C_Ulsan.svg' },
 
             { name: '경기도 수원시', link: 'https://ko.wikipedia.org/wiki/수원시', image: 'https://upload.wikimedia.org/wikipedia/commons/8/85/Flag_of_Suwon_%282022%29.svg' },
@@ -321,7 +325,11 @@
             document.getElementById('random-img').src = selectedItem.image;
             document.getElementById('random-img').style.display = 'block';
             document.getElementById('img-description').textContent = `${selectedItem.name}당첨!!`;
-            document.getElementById('wiki-link').innerHTML = `<a href="${selectedItem.link}" target="_blank">${selectedItem.name}의 위키백과 페이지로 이동(Link)</a>`;
+            document.getElementById('wiki-link').innerHTML = `
+                <a href="${selectedItem.link}" target="_blank">${selectedItem.name}의 위키백과 페이지로 이동(Link)</a><br><br><br><br>
+                광고, 비지니스 문의는 <a href="mailto:mo1342@naver.com">mo1342@naver.com</a><br>
+                RandomPickKorea_ver.1 Made by 머구 24.07.09
+            `;
             document.getElementById('wiki-link').style.display = 'block';
         }
     </script>
