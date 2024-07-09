@@ -4,7 +4,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>랜덤 이미지 선택</title>
+    <title>KoreaRandomPick</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -325,7 +325,7 @@
             // 결과 업데이트
             document.getElementById('random-img').src = selectedItem.image;
             document.getElementById('random-img').style.display = 'block';
-            document.getElementById('img-description').textContent = `${selectedItem.name}당첨!!`;
+            document.getElementById('img-description').textContent = `${selectedItem.name} 당첨!!`;
             document.getElementById('wiki-link').innerHTML = `
                 <a href="${selectedItem.link}" target="_blank">${selectedItem.name}의 위키백과 페이지로 이동(Link)</a><br><br><br><br>
                 광고, 비지니스 문의는 <a href="mailto:mo1342@naver.com">mo1342@naver.com</a><br>
